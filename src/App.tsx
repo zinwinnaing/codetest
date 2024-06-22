@@ -1,19 +1,42 @@
 // src/App.tsx
 import React, { useState, useEffect } from 'react';
-import { Weather, Forecast } from './types';
+import { Weather, Forecast,City } from './types';
 import { getCurrentWeather, getWeatherForecast } from './service/weatherService';
 import CitySelector from './component/CitySelector';
 import WeatherCard from './component/WeatherCard';
 import WeatherForecast from './component/WeatherForecast';
 
 const App: React.FC = () => {
-  const [city, setCity] = useState({ label: 'Yangon', value: 'Yangon', latitude: 16.8409, longitude: 96.1735 });
   const [weather, setWeather] = useState<Weather | null>(null);
   const [forecasts, setForecasts] = useState<Forecast[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [city, setCity] = useState<City | null>(null);
 
   useEffect(() => {
-    const fetchWeather = async () => {
+
+  if (!navigator.geolocation) {
+    console.error('Geolocation is not supported by your browser');
+    setError('Geolocation is not supported by your browser');
+    return;
+  }
+
+  const successHandler = (position: GeolocationPosition) => {
+    setCity({latitude:position?.coords?.latitude,longitude:position?.coords?.longitude,label:""});
+  };
+
+  const errorHandler = (error: GeolocationPositionError) => {
+    console.error('Error retrieving location', error);
+    setError(`Error retrieving location: ${error.message}`);
+  };
+
+  navigator.geolocation.getCurrentPosition(successHandler, errorHandler);
+}, []);
+
+  useEffect(() => {
+   
+    if(city){
+ const fetchWeather = async () => {
+    
       try {
         const currentWeather = await getCurrentWeather(city);
         setWeather(currentWeather);
@@ -25,7 +48,8 @@ const App: React.FC = () => {
       }
     };
 
-    fetchWeather();
+      fetchWeather();
+    }
   }, [city]);
 
 
@@ -33,8 +57,6 @@ const App: React.FC = () => {
   return (
     <div className="app">
       <h1>Weather App</h1>
-      
- 
       <CitySelector onCityChange={setCity} />
       {error && <p className="error">{error}</p>}
       {weather && <WeatherCard weather={weather} />}

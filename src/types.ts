@@ -15,7 +15,7 @@ export interface Forecast {
 
 export interface City {
     label:string,
-    value:string,
+
   latitude: number;
   longitude: number;
 }

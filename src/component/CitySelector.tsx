@@ -17,15 +17,20 @@ const CitySelector: React.FC<CitySelectorProps> = ({ onCityChange }) => {
   }, []);
 
   return (
-    <Select
-      options={options}
-      onChange={(selectedOption) => {
-        if (selectedOption) {
-          onCityChange(selectedOption as City);
-        }
-      }}
-      defaultValue={options.find(option => option.label === 'Yangon')}
-    />
+    <div>
+
+      <Select
+      className='react-select'
+      placeholder="Select City"
+        options={options}
+        onChange={(selectedOption) => {
+          if (selectedOption) {
+            onCityChange(selectedOption as City);
+          }
+        }}
+        defaultValue={options.find(option => option.label === 'Yangon')}
+      />
+    </div>
   );
 };
 
