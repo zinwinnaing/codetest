@@ -57,10 +57,13 @@ const App: React.FC = () => {
   return (
     <div className="app">
       <h1>Weather App</h1>
-      <CitySelector onCityChange={setCity} />
+      <div style={{height:"100vh"}}>
+<h1>hello world</h1>
+      </div>
+      {/* <CitySelector onCityChange={setCity} />
       {error && <p className="error">{error}</p>}
       {weather && <WeatherCard weather={weather} />}
-      <WeatherForecast forecasts={forecasts} />
+      <WeatherForecast forecasts={forecasts} /> */}
     </div>
   );
 };
